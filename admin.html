@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrace - Fotogalerie Světa</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-body">
+
+    <!-- PŘIHLAŠOVACÍ OBRAZOVKA -->
+    <div class="admin-auth-wrapper" id="admin-auth-page">
+        <div class="admin-login-card">
+            <h2>Administrace systému</h2>
+            <div class="form-group">
+                <input type="password" id="admin-password-input" placeholder="Zadejte heslo admina">
+            </div>
+            <div class="admin-login-actions">
+                <button id="admin-login-btn" class="btn-primary">Přihlásit se</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HLAVNÍ DASHBOARD -->
+    <div class="admin-dashboard hidden" id="admin-dashboard-page">
+        <header class="admin-dashboard-header">
+            <h1>Správa Fotogalerie ÁMOS</h1>
+            <button id="admin-logout-btn" class="btn-secondary">Odhlásit se</button>
+        </header>
+
+        <div class="admin-grid-layout">
+            <!-- LEVÝ PANEL: FORMULÁŘ S DRAG & DROP NAHRÁVÁNÍM -->
+            <div class="admin-panel-card">
+                <h2>Přidat novou zemi</h2>
+                
+                <div class="form-group">
+                    <label>Název země:</label>
+                    <input type="text" id="new-country-name" placeholder="Např. Francie">
+                </div>
+                <div class="form-group">
+                    <label>Kód země pro vlajku (ISO kód):</label>
+                    <input type="text" id="new-country-code" placeholder="Např. FR, SK, AT">
+                </div>
+                <div class="form-group">
+                    <label>Úvodní text o zemi:</label>
+                    <textarea id="new-country-main-text" placeholder="Základní popis země..."></textarea>
+                </div>
+
+                <!-- DRAG & DROP ZÓNA -->
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>Fotografie země (Přetáhněte soubory sem):</label>
+                    <div id="drop-zone" class="drag-drop-zone">
+                        <p>Přetáhněte fotky z počítače sem</p>
+                        <span>nebo klikněte pro výběr souborů</span>
+                        <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- SEZNAM PŘECESTNÝCH FOTEK S POPISKY -->
+                <div id="uploaded-photos-list" class="uploaded-photos-preview-list">
+                    <!-- Sem skočí přetažené fotky s políčkem pro popisek -->
+                </div>
+                
+                <div class="form-actions-main" style="margin-top: 20px;">
+                    <button id="save-country-btn" class="btn-primary" style="width: 100%;">Uložit zemi do systému</button>
+                </div>
+            </div>
+
+            <!-- PRAVÝ PANEL: SEZNAM ZEMÍ A MAZÁNÍ -->
+            <div class="admin-panel-card">
+                <h2>Aktuálně spravované země</h2>
+                <div id="admin-countries-list" class="admin-countries-list">
+                    <!-- Seznam zemí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

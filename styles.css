@@ -1,0 +1,418 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f5f7fa;
+    color: #2c3e50;
+    overflow-x: hidden;
+}
+
+.app-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.view {
+    display: none;
+    width: 100%;
+    padding: 40px 30px;
+}
+
+.view.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.detail-header h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #1a252f;
+}
+
+.btn-back {
+    min-width: 120px;
+    min-height: 50px;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #2c3e50;
+    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.08));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    min-height: 48px;
+    padding: 12px 24px;
+    background-color: #28bebe;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    min-height: 48px;
+    padding: 12px 24px;
+    background-color: #e2e8f0;
+    color: #2c3e50;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.btn-danger {
+    min-height: 44px;
+    padding: 8px 16px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-back:active, .btn-primary:active, .btn-secondary:active, .btn-danger:active, .country-tile-emoji:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+}
+
+/* GRID VLAJEK 3 VEDLE SEBE */
+.countries-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+}
+
+.country-tile-emoji {
+    background-color: #ffffff;
+    aspect-ratio: 1 / 1;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.08));
+    font-size: 8rem;
+    transition: transform 0.1s ease;
+    cursor: pointer;
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.main-info-card {
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 25px 30px;
+    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.08));
+    font-size: 1.3rem;
+    line-height: 1.7;
+    color: #2c3e50;
+}
+
+/* KARTA PRO HLAVNÍ FOTOGRAFII */
+.main-photo-card {
+    background-color: #ffffff;
+    border-radius: 24px;
+    padding: 24px;
+    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.08));
+}
+
+.main-photo-wrapper {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #1a252f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-photo-wrapper img {
+    width: 100%;
+    height: auto;
+    max-height: 55vh;
+    object-fit: contain;
+    display: block;
+}
+
+.main-photo-caption-box {
+    margin-top: 20px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a252f;
+}
+
+/* HORIZONTÁLNÍ SEZNAM MINIATUR K PŘEKLIKÁVÁNÍ */
+.thumbnails-section-label {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: -15px;
+    margin-top: 5px;
+}
+
+.thumbnails-container {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 10px 5px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+}
+
+.thumb-item {
+    flex: 0 0 130px;
+    height: 130px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #1a252f;
+    border: 4px solid transparent;
+    cursor: pointer;
+    scroll-snap-align: start;
+    filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.05));
+}
+
+.thumb-item.active {
+    border-color: #28bebe; /* Tyrkysový aktivní rámeček */
+}
+
+.thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnails-container::-webkit-scrollbar {
+    height: 6px;
+}
+.thumbnails-container::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 3px;
+}
+
+/* ADMIN PANEL */
+.admin-body {
+    background-color: #f0f4f8;
+    padding: 0;
+}
+
+.admin-auth-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-login-card {
+    background: #ffffff;
+    padding: 45px;
+    border-radius: 24px;
+    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.08));
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.admin-login-card h2 {
+    font-weight: 900;
+    font-size: 2rem;
+}
+
+.admin-login-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.admin-dashboard {
+    padding: 40px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.admin-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    border-bottom: 3px solid #e2e8f0;
+    padding-bottom: 20px;
+}
+
+.admin-grid-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.admin-panel-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 35px;
+    filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.08));
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-panel-card h2 {
+    font-weight: 900;
+    border-bottom: 2px solid #f5f7fa;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.form-group label {
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+input[type="text"], input[type="password"], textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    color: #1a252f;
+    background-color: #ffffff;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.drag-drop-zone {
+    border: 3px dashed #cbd5e1;
+    background-color: #f8fafc;
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.drag-drop-zone.dragover {
+    border-color: #28bebe;
+    background-color: #ecfdf5;
+}
+
+.drag-drop-zone p {
+    font-weight: 700;
+    color: #475569;
+}
+
+.drag-drop-zone span {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.uploaded-photos-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.uploaded-photo-row {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 15px;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.uploaded-photo-row img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    background-color: #000;
+}
+
+.admin-countries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.admin-country-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.admin-country-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.admin-country-flag-preview {
+    font-size: 2rem;
+}
+
+.hidden {
+    display: none !important;
+}

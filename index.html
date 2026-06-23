@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotogalerie Světa - ÁMOS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <main class="app-container">
+        
+        <!-- HLAVNÍ STRÁNKA: GRID VLAJEK (3 VEDLE SEBE) -->
+        <section id="home-view" class="view active">
+            <div id="countries-grid" class="countries-grid">
+                <!-- Dynamicky plněno z JS (USA, CZ, Kanada) -->
+            </div>
+        </section>
+
+        <!-- DETAIL ZEMĚ -->
+        <section id="detail-view" class="view">
+            <header class="detail-header">
+                <button id="back-btn" class="btn-back">⬅ Zpět</button>
+                <h1 id="country-title">Název země</h1>
+            </header>
+            
+            <div class="detail-content">
+                <!-- Úvodní text o zemi -->
+                <div class="main-info-card">
+                    <p id="main-country-desc">Popisek k zemi...</p>
+                </div>
+
+                <!-- JEDNA HLAVNÍ FOTOGRAFIE S POPISEK POD NÍ (Není klikatelná) -->
+                <div class="main-photo-card">
+                    <div class="main-photo-wrapper">
+                        <img id="main-display-img" src="" alt="Zobrazená fotografie">
+                    </div>
+                    <div class="main-photo-caption-box">
+                        <p id="main-display-caption">Popisek fotografie...</p>
+                    </div>
+                </div>
+
+                <!-- PÁS MINIATUR PRO PREKLIKÁVÁNÍ -->
+                <div class="thumbnails-section-label">Fotografie v albu:</div>
+                <div id="thumbnails-container" class="thumbnails-container">
+                    <!-- Dynamicky naskládané miniatury -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
