@@ -1,14 +1,9 @@
-function getFlagEmoji(countryCode) {
-    if (!countryCode) return "🏳️";
-    const codePoints = countryCode.toUpperCase().split('').map(char => 127397 + char.charCodeAt(0));
-    return String.fromCodePoint(...codePoints);
-}
-
+// VÝCHOZÍ DATA NAPOJENÁ PŘÍMO NA TVOU SLOŽKU PODKLADY S GRAFICKÝMI DLAŽDICEMI
 const initialCountries = [
     {
         id: "usa",
         name: "USA",
-        code: "US",
+        tileImg: "Podklady/CountryWebUSA.png", // Tvoje reálná grafická dlaždice 600x600
         mainText: "Spojené státy americké. Prozkoumej úchvatná místa, divokou přírodu i velkoměsta na autorských fotografiích.",
         photos: [
             { img: "Podklady/IMG_0896.jpeg", desc: "Pohled na krajinu a cestu" },
@@ -17,17 +12,34 @@ const initialCountries = [
             { img: "Podklady/IMG_1274.jpeg", desc: "Interiér / detailní pohled na výšku" }
         ]
     },
-    { id: "cesko", name: "Česká republika", code: "CZ", mainText: "Česká republika je srdcem Evropy. Zatím zde nejsou nahrané žádné fotografie.", photos: [] },
-    { id: "kanada", name: "Kanada", code: "CA", mainText: "Kanada je země javorového listu, rozlehlých lesů a ledovcových jezer. Čeká na nahrání fotografií.", photos: [] }
+    {
+        id: "nemecko",
+        name: "Německo",
+        tileImg: "Podklady/CountryWebDE.png", // Tvoje reálná grafická dlaždice 600x600
+        mainText: "Spolková republika Německo. Zatím zde nejsou nahrané žádné fotografie.",
+        photos: []
+    },
+    {
+        id: "velka-britanie",
+        name: "Velká Británie",
+        tileImg: "Podklady/CountryWebENG.png", // Tvoje reálná grafická dlaždice 600x600
+        mainText: "Velká Británie a Severní Irsko. Čeká na nahrání fotografií.",
+        photos: []
+    }
 ];
 
-let appState = { countries: [] };
+let appState = { 
+    countries: [],
+    currentCountry: null,
+    currentPhotoIndex: 0
+};
 
 function initApp() {
     const savedData = localStorage.getItem('amos_gallery_data');
     if (savedData) {
         const parsedData = JSON.parse(savedData);
-        const hasOldData = parsedData.some(c => c.id === 'italie' || !c.code);
+        // Reset starých pokusů (poznáme podle přítomnosti starého klíče code místo tileImg)
+        const hasOldData = parsedData.some(c => c.id === 'italie' || c.code);
         if (hasOldData) {
             appState.countries = initialCountries;
             localStorage.setItem('amos_gallery_data', JSON.stringify(initialCountries));
@@ -39,76 +51,121 @@ function initApp() {
         localStorage.setItem('amos_gallery_data', JSON.stringify(initialCountries));
     }
     renderCountriesGrid();
+    setupArrowNavigation();
 }
 
 function renderCountriesGrid() {
     const grid = document.getElementById('countries-grid');
     if (!grid) return;
     grid.innerHTML = '';
+    
     appState.countries.forEach(country => {
         const tile = document.createElement('div');
-        tile.className = 'country-tile-emoji';
-        tile.textContent = getFlagEmoji(country.code);
+        tile.className = 'country-tile-img-box';
+        
+        const img = document.createElement('img');
+        img.src = country.tileImg || 'https://picsum.photos/600/600?random=99';
+        tile.appendChild(img);
+        
         tile.addEventListener('click', () => openCountryDetail(country.id));
         grid.appendChild(tile);
     });
 }
 
-// KLÍČOVÁ ZMĚNA: Načtení jedné fotky a vygenerování pásu ovladačů
 function openCountryDetail(countryId) {
     const country = appState.countries.find(c => c.id === countryId);
     if (!country) return;
 
+    appState.currentCountry = country;
+    appState.currentPhotoIndex = 0;
+
     document.getElementById('country-title').textContent = country.name;
     document.getElementById('main-country-desc').textContent = country.mainText;
 
-    const mainImg = document.getElementById('main-display-img');
-    const mainCaption = document.getElementById('main-display-caption');
-    const thumbContainer = document.getElementById('thumbnails-container');
-    
-    thumbContainer.innerHTML = '';
+    const prevBtn = document.getElementById('prev-photo-btn');
+    const nextBtn = document.getElementById('next-photo-btn');
 
     if (country.photos.length === 0) {
-        mainImg.src = '';
-        mainImg.style.display = 'none';
-        mainCaption.textContent = 'Zatím zde nejsou žádné fotografie. Přidejte je přes administraci.';
-        thumbContainer.innerHTML = '<div style="font-weight:700; color:#64748b;">Žádné miniatury k zobrazení</div>';
+        document.getElementById('main-display-img').style.display = 'none';
+        document.getElementById('main-display-caption').textContent = 'Zatím zde nejsou žádné fotografie. Přidejte je přes administraci.';
+        document.getElementById('thumbnails-container').innerHTML = '<div style="font-weight:700; color:#64748b; padding-top:10px;">Žádné fotky k zobrazení</div>';
+        if(prevBtn) prevBtn.style.display = 'none';
+        if(nextBtn) nextBtn.style.display = 'none';
     } else {
-        mainImg.style.display = 'block';
+        document.getElementById('main-display-img').style.display = 'block';
+        if(prevBtn) prevBtn.style.display = 'flex';
+        if(nextBtn) nextBtn.style.display = 'flex';
         
-        // Nastavíme jako první zobrazenou fotku tu nultou v pořadí
-        mainImg.src = country.photos[0].img;
-        mainCaption.textContent = country.photos[0].desc;
-
-        // Vygenerujeme horizontální pás miniatur pod ní
-        country.photos.forEach((photo, index) => {
-            const thumb = document.createElement('div');
-            thumb.className = `thumb-item ${index === 0 ? 'active' : ''}`;
-            
-            const img = document.createElement('img');
-            img.src = photo.img;
-            
-            thumb.appendChild(img);
-            
-            // Kliknutí změní velkou zobrazenou fotku na středu
-            thumb.addEventListener('click', () => {
-                document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
-                
-                mainImg.src = photo.img;
-                mainCaption.textContent = photo.desc;
-            });
-            
-            thumbContainer.appendChild(thumb);
-        });
+        updateMainPhotoDisplay();
+        renderThumbnails();
     }
     switchView('detail-view');
+}
+
+function updateMainPhotoDisplay() {
+    const country = appState.currentCountry;
+    const index = appState.currentPhotoIndex;
+    if (!country || !country.photos[index]) return;
+    
+    document.getElementById('main-display-img').src = country.photos[index].img;
+    document.getElementById('main-display-caption').textContent = country.photos[index].desc;
+    
+    document.querySelectorAll('.thumb-item').forEach((thumb, tIndex) => {
+        if (tIndex === index) {
+            thumb.classList.add('active');
+            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } else {
+            thumb.classList.remove('active');
+        }
+    });
+}
+
+function renderThumbnails() {
+    const thumbContainer = document.getElementById('thumbnails-container');
+    thumbContainer.innerHTML = '';
+    
+    appState.currentCountry.photos.forEach((photo, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = `thumb-item ${index === appState.currentPhotoIndex ? 'active' : ''}`;
+        
+        const img = document.createElement('img');
+        img.src = photo.img;
+        thumb.appendChild(img);
+        
+        thumb.addEventListener('click', () => {
+            appState.currentPhotoIndex = index;
+            updateMainPhotoDisplay();
+        });
+        
+        thumbContainer.appendChild(thumb);
+    });
+}
+
+function setupArrowNavigation() {
+    const prevBtn = document.getElementById('prev-photo-btn');
+    const nextBtn = document.getElementById('next-photo-btn');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            const country = appState.currentCountry;
+            if (!country || country.photos.length <= 1) return;
+            appState.currentPhotoIndex = (appState.currentPhotoIndex === 0) ? country.photos.length - 1 : appState.currentPhotoIndex - 1;
+            updateMainPhotoDisplay();
+        });
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const country = appState.currentCountry;
+            if (!country || country.photos.length <= 1) return;
+            appState.currentPhotoIndex = (appState.currentPhotoIndex === country.photos.length - 1) ? 0 : appState.currentPhotoIndex + 1;
+            updateMainPhotoDisplay();
+        });
+    }
 }
 
 function switchView(viewId) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById(viewId).classList.add('active');
-    window.scrollTo(0, 0);
 }
 
 if (document.getElementById('back-btn')) {
