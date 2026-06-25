@@ -8,31 +8,35 @@
 </head>
 <body>
 
+    <!-- FIXNÍ KONTEJNER PRO ÁMOS OBRAZOVKU 1080x1000 px -->
     <main class="app-container">
         
-        <!-- HLAVNÍ STRÁNKA: GRID VLAJEK (3 VEDLE SEBE) -->
+        <!-- HLAVNÍ STRÁNKA: GRID GRAFICKÝCH DLAŽDIC (3 VEDLE SEBE) -->
         <section id="home-view" class="view active">
             <div id="countries-grid" class="countries-grid">
-                <!-- Dynamicky plněno z JS (USA, CZ, Kanada) -->
+                <!-- Dynamicky plněno z JS pomocí obrázků DE, ENG, USA -->
             </div>
         </section>
 
         <!-- DETAIL ZEMĚ -->
         <section id="detail-view" class="view">
+            <!-- NOVÁ HLAVIČKA: Název a popisek vedle sebe pro úsporu místa -->
             <header class="detail-header">
                 <button id="back-btn" class="btn-back">⬅ Zpět</button>
-                <h1 id="country-title">Název země</h1>
+                <div class="header-text-block">
+                    <h1 id="country-title">USA</h1>
+                    <div class="main-info-card-inline">
+                        <p id="main-country-desc">Popisek k zemi...</p>
+                    </div>
+                </div>
             </header>
             
             <div class="detail-content">
-                <!-- Úvodní text o zemi -->
-                <div class="main-info-card">
-                    <p id="main-country-desc">Popisek k zemi...</p>
-                </div>
-
-                <!-- JEDNA HLAVNÍ FOTOGRAFIE S POPISEK POD NÍ (Není klikatelná) -->
+                <!-- HLAVNÍ ZOBRAZENÁ FOTOGRAFIE SE ŠIPKAMI -->
                 <div class="main-photo-card">
                     <div class="main-photo-wrapper">
+                        <button id="prev-photo-btn" class="nav-arrow-btn prev">◀</button>
+                        <button id="next-photo-btn" class="nav-arrow-btn next">▶</button>
                         <img id="main-display-img" src="" alt="Zobrazená fotografie">
                     </div>
                     <div class="main-photo-caption-box">
@@ -40,10 +44,12 @@
                     </div>
                 </div>
 
-                <!-- PÁS MINIATUR PRO PREKLIKÁVÁNÍ -->
-                <div class="thumbnails-section-label">Fotografie v albu:</div>
-                <div id="thumbnails-container" class="thumbnails-container">
-                    <!-- Dynamicky naskládané miniatury -->
+                <!-- HORIZONTÁLNÍ PÁS MINIATUR -->
+                <div class="thumbnails-wrapper-row">
+                    <div class="thumbnails-section-label">Fotografie v albu:</div>
+                    <div id="thumbnails-container" class="thumbnails-container">
+                        <!-- Miniatury -->
+                    </div>
                 </div>
             </div>
         </section>
